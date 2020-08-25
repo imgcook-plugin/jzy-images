@@ -13,8 +13,9 @@ describe('index.js', () => {
       accessId: 'xx',
       dslId: 41,
       generator: ['@imgcook/generator-react'],
-      plugin: ['@imgcook/plugin-images'],
-      uploadUrl: '',
+      plugin: [],
+      // plugin: ['@imgcook/plugin-images'],
+      uploadUrl: 'http://127.0.0.1:7001/ajax',
       value: '17679'
     }
   };
