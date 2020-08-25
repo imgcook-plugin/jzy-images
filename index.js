@@ -9,13 +9,16 @@ const { unique, downloadImg } = require('@imgcook/cli-utils');
 const chalk = require('chalk');
 const UPLOAD = require('./lib/upload');
 const upload = new UPLOAD();
+const moment = require('moment');
 
-const uploadData = (file, filepath, option) => {
+const uploadData = (file, filepath, versionName, moduleName, option) => {
   return new Promise(resolve => {
     upload.uploadUrl = option.uploadUrl;
     upload
       .start(file, {
-        filepath: filepath
+        filepath: filepath,
+        version: versionName,
+        module: moduleName
       })
       .then(res => {
         resolve(res.data);
@@ -34,6 +37,11 @@ const loader = async (option) => {
   if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
   }
+
+  let configPathArray = filePath.split('/');
+  let moduleName = configPathArray[configPathArray.length -1];
+  let versionName = moment().format('YYYYMMDD-HHmmss');
+
   const panelDisplay = data.code.panelDisplay || [];
   const moduleData = data.moduleData;
   let index = 0;
@@ -76,6 +84,8 @@ const loader = async (option) => {
             const udata = await uploadData(
               imgPathItem,
               `imgcook-cli/${temporaryImages}/`,
+              versionName,
+              moduleName,
               option.config
             );
             fileValue = fileValue.replace(reg, udata.url);
